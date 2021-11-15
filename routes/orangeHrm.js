@@ -50,7 +50,7 @@ router.get('/orangeHrm/employees', async function(req,res,next){
             };
     
         console.log(token.data["access_token"]);
-        const result = await axios.get('api/v1/employee/1', {}, getConfig)
+        const result = await axios.get(`${baseUrl}api/v1/employee/1`, {}, getConfig)
         
         if (result.data.error) {
             throw Error(result.data.error); 

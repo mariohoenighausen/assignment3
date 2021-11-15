@@ -3,21 +3,22 @@ const router = express.Router();
 //Axios Import
 const axios = require('axios');
 
-//openCrx
-router.get('/openCrx', async function(req,res,next){
-    const baseUrl = 'https://sepp-crm.inf.h-brs.de/opencrx-rest-CRX'; 
-    const credentials = {
+const openCrx = '/openCrx'
+const baseUrl = 'https://sepp-crm.inf.h-brs.de/opencrx-rest-CRX/org.opencrx.kernel.account1/provider/CRX/segment/Standard'; 
+const credentials = {
     username:'guest',
     password:'guest'
     };
-    const config = { headers: {
+const config = { headers: {
         'Accept': 'application/json' },
         auth: credentials, };
+//openCrx
+router.get(`${openCrx}/all`, async function(req,res,next){
     try{
-        const contacts = await axios.get(`${baseUrl}/org.opencrx.kernel.account1/provider/CRX/segment/Standard/account`, config);
+        const contacts = await axios.get(`${baseUrl}/account`, config);
         const customers = contacts.data.objects;
         for(const[key, value] of customers.entries('objects')){
-            console.log(value['@type']);
+            //console.log(value['@type']);
             //console.log(value['@href']);
             //console.log(value['@version']);
             //console.log(value['accountRating']);
@@ -44,6 +45,21 @@ router.get('/openCrx', async function(req,res,next){
 
         }
         res.json({msg: "Here are all the posts!",customers})
+    }
+    catch(error){
+        next(error);
+    }
+});
+router.get(`${openCrx}/salesOrder`, async function(req,res,next){
+    try{
+        //const axiosResponse = await axios.get(`${baseUrl}/salesOrder`, config);
+        const axiosResponse = await axios.get("https://sepp-crm.inf.h-brs.de/opencrx-rest-CRX/org.opencrx.kernel.contract1/provider/CRX/segment/Standard/salesOrder", config);
+        const salesOrder = axiosResponse.data.objects;
+        for(const[key, value] of salesOrder.entries('objects')){
+            //console.log(value['@type']);
+
+        }
+        res.json({msg: "Here are all the posts!",salesOrder})
     }
     catch(error){
         next(error);
