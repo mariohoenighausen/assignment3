@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 //Axios Import
 const axios = require('axios');
+
 const qs = require('querystring');
 
 const baseUrl = 'https://sepp-hrm.inf.h-brs.de/symfony/web/index.php/';
@@ -43,14 +44,14 @@ router.get('/orangeHrm/employees', async function(req,res,next){
     try{
         token = await axios.post(`${baseUrl}oauth/issueToken`, body, config); 
         getConfig = { headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/json',
-            'Authorization' : `Bearer ${token.data["access_token"]}`,
+            Authorization : `Bearer ${token.data["access_token"]}`,
             }
             };
     
         console.log(token.data["access_token"]);
-        const result = await axios.get(`${baseUrl}api/v1/employee/1`, {}, getConfig)
+        axios.defaults.headers.common['Authorization'] = getConfig;
+        console.log(`${baseUrl}api/v1/employee/1`);
+        const result = await axios.get(`${baseUrl}api/v1/employee/1`,{})
         
         if (result.data.error) {
             throw Error(result.data.error); 

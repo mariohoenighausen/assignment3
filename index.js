@@ -12,7 +12,7 @@ app.use((req,res,next)=>{
     next();
 });
 
-//Middlewar that enables json body encoding
+//Middleware that enables json body encoding
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
@@ -25,8 +25,8 @@ const openCrxRoute = require('./routes/opencrx.js');
 const orangeHrmRoute = require('./routes/orangeHrm')
 const testRoute = require('./routes/test')
 
-//Hello world Route 
 const api = '/api';
+//Hello world Route 
 app.get('/', (req,res,next)=>{
     res.send('Hello World!');
 });
@@ -37,4 +37,4 @@ app.use(api, testRoute);
 
 app.listen(PORT, ()=>{
     console.log(`App is listening at http://localhost:${PORT}`);
-})
+});
