@@ -74,11 +74,18 @@ router.put('/tests/:testId', async function(req,res,next){
 });
 
 router.delete('/tests/:testId', async function(req,res,next){
-    tests = tests.filter(index != testId);
+    var newTests = [];
+    const id = req.params.testId;
+    for(idx = 0; idx < tests.length; idx++){
+        if(tests[idx] !== tests[id]){
+            newTests.push(tests[idx])
+        }
+    }
+    tests = newTests;
 
     let promise = ()=>{
         return new Promise((resolve,reject)=>{
-            resolve({"enlisted-test":newTest});
+            resolve({"enlisted-test":tests});
         });
     };
     try{
