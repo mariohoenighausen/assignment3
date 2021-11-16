@@ -39,8 +39,9 @@ router.get('/orangeHrm', async function(req,res,next){
         }
 });
 
-router.get('/orangeHrm/employees', async function(req,res,next){
+router.get('/orangeHrm/employees/:employeeId', async function(req,res,next){
     //https://sepp-hrm.inf.h-brs.de/symfony/web/index.php/api/v1/employee/1
+    const id = req.params.employeeId;
     try{
         token = await axios.post(`${baseUrl}oauth/issueToken`, body, config); 
         getConfig = { headers: {
@@ -49,14 +50,15 @@ router.get('/orangeHrm/employees', async function(req,res,next){
             };
     
         console.log(token.data["access_token"]);
-        axios.defaults.headers.common['Authorization'] = getConfig;
-        console.log(`${baseUrl}api/v1/employee/1`);
-        const result = await axios.get(`${baseUrl}api/v1/employee/1`,{})
+        //axios.defaults.headers.common['Authorization'] = getConfig;
+        const result = await axios.get(`${baseUrl}api/v1/employee/${id}`,{},{headers:{
+            Authorization : `${token.data["access_token"]}`
+        }});
         
         if (result.data.error) {
             throw Error(result.data.error); 
         }
-        res.send({msg: "Here are all the posts!",result})
+        res.send({result})
     }
     catch(error){
         next(error);
